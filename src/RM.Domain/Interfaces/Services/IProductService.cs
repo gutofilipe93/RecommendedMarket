@@ -5,6 +5,6 @@ namespace RM.Domain.Interfaces.Services
 {
     public interface IProductService
     {
-         Task<ResponseApiHelper> AddProductsAysnc(string file);
+         Task<ResponseApiHelper> AddProductsAndSearchableNamesAysnc(string file);
     }
 }

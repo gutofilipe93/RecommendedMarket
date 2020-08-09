@@ -17,7 +17,7 @@ namespace RM.Domain.Services
             CsvUserDetailsMapping csvMapper = new CsvUserDetailsMapping();
             CsvParser<ProductDto> csvParser = new CsvParser<ProductDto>(csvParserOptions, csvMapper);
             result = csvParser
-                         .ReadFromFile(@"file", Encoding.UTF8)
+                         .ReadFromFile(file, Encoding.UTF8)
                          .ToList();
 
             return FormatCsvToProduct(result);

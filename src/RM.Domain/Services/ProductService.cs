@@ -20,18 +20,22 @@ namespace RM.Domain.Services
             _productRepository = productRepository;
         }
 
-        public async Task<ResponseApiHelper> AddProductsAysnc(string file)
+        public async Task<ResponseApiHelper> AddProductsAndSearchableNamesAysnc(string file)
         {
             var productsFile = _fileCsvService.ReadFile(file);
             string market = productsFile.FirstOrDefault(x => x.Mercado != null)?.Mercado;
             var productsFirebase = await _productRepository.GetAsync(market);
+            var namesFirebase = await _productRepository.GetSearchableNamesAsync();
             List<Product> products = new List<Product>();
             foreach (var productFile in productsFile)
             {
                 Product product = AssembleProductsToList(productsFirebase,productFile);
                 products.Add(product);
+                if(!namesFirebase.Contains(productFile.NomePesquisa))
+                    namesFirebase.Add(productFile.NomePesquisa);
             }
             await _productRepository.AddAsync(products,market);
+            await _productRepository.AddSearchableNamesAsync(namesFirebase.ToList());
             return new ResponseApiHelper{Message = "Produtos cadastrados",Success = true, Data = products};
         }
 
