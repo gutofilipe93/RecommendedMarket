@@ -8,5 +8,6 @@ namespace RM.Domain.Services.Dtos
         public string NomePesquisa { get; set; }
         public string Mercado { get; set; }
         public string DataCompra { get; set; }
+        public string Cpf { get; set; }
     }
 }

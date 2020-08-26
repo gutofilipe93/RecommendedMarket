@@ -27,16 +27,26 @@ namespace RM.Domain.Services
             var productsFirebase = await _productRepository.GetAsync(market);
             var namesFirebase = await _productRepository.GetSearchableNamesAsync();
             List<Product> products = new List<Product>();
+            AddProductsFile(productsFile, productsFirebase, namesFirebase, products);
+            foreach (var product in productsFirebase)
+            {
+                if(!products.Any(x => x.SearchableName == product.SearchableName))
+                    products.Add(product);
+            }
+            await _productRepository.AddAsync(products, market);
+            await _productRepository.AddSearchableNamesAsync(namesFirebase.ToList());
+            return new ResponseApiHelper { Message = "Produtos cadastrados", Success = true, Data = products };
+        }
+
+        private void AddProductsFile(List<ProductDto> productsFile, ICollection<Product> productsFirebase, ICollection<string> namesFirebase, List<Product> products)
+        {
             foreach (var productFile in productsFile)
             {
-                Product product = AssembleProductsToList(productsFirebase,productFile);
+                Product product = AssembleProductsToList(productsFirebase, productFile);
                 products.Add(product);
-                if(!namesFirebase.Contains(productFile.NomePesquisa))
+                if (!namesFirebase.Contains(productFile.NomePesquisa))
                     namesFirebase.Add(productFile.NomePesquisa);
             }
-            await _productRepository.AddAsync(products,market);
-            await _productRepository.AddSearchableNamesAsync(namesFirebase.ToList());
-            return new ResponseApiHelper{Message = "Produtos cadastrados",Success = true, Data = products};
         }
 
         private Product AssembleProductsToList(ICollection<Product> productsFirebase, ProductDto productsFile)

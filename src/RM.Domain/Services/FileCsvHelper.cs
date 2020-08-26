@@ -43,7 +43,8 @@ namespace RM.Domain.Services
             MapProperty(2, x => x.TemOferta);
             MapProperty(3, x => x.NomePesquisa);
             MapProperty(4, x => x.Mercado);
-            MapProperty(5, x => x.DataCompra);
+            MapProperty(5, x => x.Cpf);
+            MapProperty(6, x => x.DataCompra);
         }
     } 
 }
