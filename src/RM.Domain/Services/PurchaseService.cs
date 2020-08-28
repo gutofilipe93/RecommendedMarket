@@ -25,7 +25,7 @@ namespace RM.Domain.Services
             var productsDto = _fileCsvService.ReadFile(file);
             Purchase purchase = FormatPurchase(productsDto);
             await _purchaseRepository.AddAsync(purchase);
-            return new ResponseApiHelper {Message =  "Compra cadastrada", Success = true};
+            return new ResponseApiHelper {Message =  "Compra cadastrada", Success = true, Data = purchase};
         }
         
         private  Purchase FormatPurchase(List<ProductDto> productsDto)
