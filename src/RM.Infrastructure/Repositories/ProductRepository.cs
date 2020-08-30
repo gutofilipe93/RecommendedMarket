@@ -15,7 +15,7 @@ namespace RM.Infrastructure.Repositories
             DocumentReference docRef = db.Collection("products").Document(market);
             Dictionary<string, object> initialData = new Dictionary<string, object>();
             initialData.Add("Products", products);
-            await docRef.SetAsync(initialData);            
+            await docRef.SetAsync(initialData);
         }
 
         public async Task AddSearchableNamesAsync(List<string> names)
@@ -34,8 +34,22 @@ namespace RM.Infrastructure.Repositories
             if (!document.Exists)
                 return new List<Product>();
 
-            var products = document.ConvertTo<Dictionary<string, List<Product>>>();                                    
+            var products = document.ConvertTo<Dictionary<string, List<Product>>>();
             return products["Products"];
+        }
+
+        public async Task<ICollection<string>> GetMarkets()
+        {
+            var db = new FirebaseConnection().Open();
+            var collections = await db.Collection("products").GetSnapshotAsync();
+            List<string> markets = new List<string>();
+            foreach (var document in collections.Documents)
+            {
+                if (document.Id != "NomePesquisaveis")
+                    markets.Add(document.Id);
+            }
+
+            return markets;
         }
 
         public async Task<ICollection<string>> GetSearchableNamesAsync()
@@ -45,7 +59,7 @@ namespace RM.Infrastructure.Repositories
             if (!document.Exists)
                 return new List<string>();
 
-            var names = document.ConvertTo<Dictionary<string, List<string>>>();                                    
+            var names = document.ConvertTo<Dictionary<string, List<string>>>();
             return names["NomePesquisaveis"];
         }
     }

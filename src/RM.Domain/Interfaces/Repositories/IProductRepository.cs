@@ -10,5 +10,6 @@ namespace RM.Domain.Interfaces.Repositories
         Task AddAsync(List<Product> products, string market);
         Task<ICollection<string>> GetSearchableNamesAsync();
         Task AddSearchableNamesAsync(List<string> names);
+        Task<ICollection<string>> GetMarkets();
     }
 }

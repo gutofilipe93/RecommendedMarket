@@ -24,29 +24,35 @@ namespace RM.Domain.Services
         {
             var productsFile = _fileCsvService.ReadFile(file);
             string market = productsFile.FirstOrDefault(x => x.Mercado != null)?.Mercado;
-            var productsFirebase = await _productRepository.GetAsync(market);
-            var namesFirebase = await _productRepository.GetSearchableNamesAsync();
-            List<Product> products = new List<Product>();
-            AddProductsFile(productsFile, productsFirebase, namesFirebase, products);
-            foreach (var product in productsFirebase)
-            {
-                if(!products.Any(x => x.SearchableName == product.SearchableName))
-                    products.Add(product);
-            }
+            var productsFirebase = await _productRepository.GetAsync(market);            
+            List<Product> products = AddProductsFirebase(productsFile, productsFirebase);
+            products = products.Union(AddProductsFile(productsFile, productsFirebase)).ToList();
+            var namesFirebase = await AddSearchableNamesAsync(productsFile);
             await _productRepository.AddAsync(products, market);
             await _productRepository.AddSearchableNamesAsync(namesFirebase.ToList());
             return new ResponseApiHelper { Message = "Produtos cadastrados", Success = true, Data = products };
         }
 
-        private void AddProductsFile(List<ProductDto> productsFile, ICollection<Product> productsFirebase, ICollection<string> namesFirebase, List<Product> products)
+        private List<Product> AddProductsFirebase(List<ProductDto> productsFile, ICollection<Product> productsFirebase)
         {
+            List<Product> products = new List<Product>();
+            foreach (var product in productsFirebase)
+            {
+                if (!productsFile.Any(x => x.NomePesquisa == product.SearchableName))
+                    products.Add(product);
+            }
+            return products;
+        }
+
+        private List<Product> AddProductsFile(List<ProductDto> productsFile, ICollection<Product> productsFirebase)
+        {
+            List<Product> products = new List<Product>();
             foreach (var productFile in productsFile)
             {
                 Product product = AssembleProductsToList(productsFirebase, productFile);
                 products.Add(product);
-                if (!namesFirebase.Contains(productFile.NomePesquisa))
-                    namesFirebase.Add(productFile.NomePesquisa);
             }
+            return products;
         }
 
         private Product AssembleProductsToList(ICollection<Product> productsFirebase, ProductDto productsFile)
@@ -67,7 +73,7 @@ namespace RM.Domain.Services
                 DateOfLastPurchase = productFile.DataCompra,
                 Market = productFile.Mercado,
                 PenultimatePrice = productFile.Preco,
-                PenultimatePurchaseDate = productFile.DataCompra,
+                DatePenultimatePurchase = productFile.DataCompra,
                 Price = productFile.Preco,
                 TemOferta = productFile.TemOferta == 1 ? true : false,
                 SearchableName = productFile.NomePesquisa
@@ -76,10 +82,22 @@ namespace RM.Domain.Services
 
         private void FormatProductFound(ProductDto productFile, Product productFirebase)
         {
-            productFirebase.PenultimatePurchaseDate = productFirebase.DateOfLastPurchase;
+            productFirebase.DatePenultimatePurchase = productFirebase.DateOfLastPurchase;
             productFirebase.PenultimatePrice = productFirebase.Price;
             productFirebase.Price = productFile.Preco;
+            productFirebase.DateOfLastPurchase = productFile.DataCompra;
             productFirebase.TemOferta = productFile.TemOferta == 1 ? true : false;
+        }
+
+        private async Task<List<string>> AddSearchableNamesAsync(List<ProductDto> productsFile)
+        {
+            var namesFirebase = await _productRepository.GetSearchableNamesAsync();
+            foreach (var productFile in productsFile)
+            {
+                if (!namesFirebase.Contains(productFile.NomePesquisa))
+                    namesFirebase.Add(productFile.NomePesquisa);
+            }
+            return namesFirebase.ToList();
         }
     }
 }

@@ -21,7 +21,7 @@ namespace RM.Domain.Entities
         public string DateOfLastPurchase { get; set; }
         
         [FirestoreProperty]
-        public string PenultimatePurchaseDate { get; set; }
+        public string DatePenultimatePurchase   { get; set; }
         
         [FirestoreProperty]
         public string Market { get; set; }
