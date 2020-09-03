@@ -35,6 +35,9 @@ namespace RM.Domain.Services
             foreach (var item in itemsPurchase)
             {
                 var product = recommendsMarketFirebase.Items.FirstOrDefault(x => x.SearchableName == item);
+                if (product == null)
+                    continue;
+
                 recommendsMarket.Items.Add(product);
                 GetBestShoppingMarket(markets, product);
             }
@@ -61,7 +64,7 @@ namespace RM.Domain.Services
             var itemsRecommends = new List<RecommendsMarketItem>();
             foreach (var name in namesSearchable)
             {
-                var product = productsFirebase.OrderByDescending(x => x.Price).FirstOrDefault(x => x.SearchableName == name);
+                var product = productsFirebase.OrderBy(x => x.Price).FirstOrDefault(x => x.SearchableName == name);
                 itemsRecommends.Add(FormatProductToRecommendMarkeItem(product));
             }
             return itemsRecommends;

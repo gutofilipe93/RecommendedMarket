@@ -13,7 +13,8 @@ namespace RM.Infrastructure.Repositories
         {
             var db = new FirebaseConnection().Open();
             var document = db.Collection("recommendsMarket").Document("recommendation");
-            await document.DeleteAsync();
+            if (document != null)
+                await document.DeleteAsync();
         }
 
         public async Task<RecommendsMarket> GetRecommendsMarket()

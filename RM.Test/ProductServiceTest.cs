@@ -87,29 +87,7 @@ namespace RM.Test
             Assert.Equal("30/08/2020",productsFirebase.FirstOrDefault(x => x.SearchableName == "linguica").DateOfLastPurchase);
         }
 
-        [Fact(DisplayName = "Deve adicionar os nomes pesquisaveis sem duplica-los")]
-        [Trait("Recomendacao de Mercado", "Salvar nomes pesquisaveis")]
-        public async Task MustInsertSeachableNameWithoutPublishing()
-        {
-            _products.Add(new Product
-            {
-                Name = "Agua",
-                Market = "tonin",
-                Price = 12.56d,
-                PenultimatePrice = 12.55d,
-                SearchableName = "linguica",
-                TemOferta = false,
-                DateOfLastPurchase = "30/08/2020",
-                DatePenultimatePurchase = "30/08/2020"
-            });
-
-            var result = await _productService.AddProductsAndSearchableNamesAysnc("tonin");
-            var productsFirebase = (List<Product>)result.Data;
-            
-
-            // verificar como adicionar essa parte
-        }
-
+     
         
         [Fact(DisplayName = "Deve atualizar o preço e a data de acordo com o arquivo csv")]
         [Trait("Recomendacao de Mercado", "Update preco e data")]

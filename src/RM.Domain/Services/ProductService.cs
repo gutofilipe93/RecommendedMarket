@@ -97,7 +97,7 @@ namespace RM.Domain.Services
                 if (!namesFirebase.Contains(productFile.NomePesquisa))
                     namesFirebase.Add(productFile.NomePesquisa);
             }
-            return namesFirebase.ToList();
+            return namesFirebase.OrderBy(x=> x).ToList();
         }
     }
 }
