@@ -11,10 +11,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Protocols;
 using Microsoft.IdentityModel.Tokens;
 using RM.Domain.Interfaces.Repositories;
 using RM.Domain.Interfaces.Services;
 using RM.Domain.Services;
+using RM.Infrastructure.Data;
 using RM.Infrastructure.Repositories;
 
 namespace RM.UI.Api
@@ -47,6 +49,8 @@ namespace RM.UI.Api
                 };
             });
 
+            //infra
+            services.AddScoped<IFirebaseConnection, FirebaseConnection>();            
             //Repositoreis
             services.AddScoped<IPurchaseRepository,PurchaseRepository>();
             services.AddScoped<IProductRepository,ProductRepository>();

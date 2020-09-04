@@ -8,9 +8,14 @@ namespace RM.Infrastructure.Repositories
 {
     public class PurchaseRepository : IPurchaseRepository
     {
+        private readonly IFirebaseConnection _firebaseConnection;
+        public PurchaseRepository(IFirebaseConnection firebaseConnection)
+        {
+            _firebaseConnection = firebaseConnection;
+        }
         public async Task AddAsync(Purchase purchase)
         {
-            var db = new FirebaseConnection().Open();
+            var db = _firebaseConnection.Open();
             DocumentReference docRef = db.Collection("shopping").Document();
             await docRef.SetAsync(purchase);
         }

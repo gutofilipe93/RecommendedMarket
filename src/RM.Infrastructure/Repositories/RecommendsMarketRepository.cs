@@ -9,9 +9,15 @@ namespace RM.Infrastructure.Repositories
 {
     public class RecommendsMarketRepository : IRecommendsMarketRepository
     {
+        private readonly IFirebaseConnection _firebaseConnection;
+        public RecommendsMarketRepository(IFirebaseConnection firebaseConnection)
+        {
+            _firebaseConnection = firebaseConnection;
+        }
+
         public async Task DeleteAsync()
         {
-            var db = new FirebaseConnection().Open();
+            var db = _firebaseConnection.Open();
             var document = db.Collection("recommendsMarket").Document("recommendation");
             if (document != null)
                 await document.DeleteAsync();
@@ -19,7 +25,7 @@ namespace RM.Infrastructure.Repositories
 
         public async Task<RecommendsMarket> GetRecommendsMarket()
         {
-            var db = new FirebaseConnection().Open();
+            var db = _firebaseConnection.Open();
             var document = await db.Collection("recommendsMarket").Document("recommendation").GetSnapshotAsync();
             if (!document.Exists)
                 return new RecommendsMarket { Items = new List<RecommendsMarketItem>()};
@@ -30,7 +36,7 @@ namespace RM.Infrastructure.Repositories
 
         public async Task SaveAsync(RecommendsMarket recommendsMarket)
         {
-            var db = new FirebaseConnection().Open();
+            var db = _firebaseConnection.Open();
             DocumentReference docRef = db.Collection("recommendsMarket").Document("recommendation");
             await docRef.SetAsync(recommendsMarket);
         }
