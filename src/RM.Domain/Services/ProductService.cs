@@ -13,11 +13,13 @@ namespace RM.Domain.Services
     {
         private readonly IFileCsvService _fileCsvService;
         private readonly IProductRepository _productRepository;
+        private readonly IRecommendsMarketRepository _recommendsMarketRepository;
 
-        public ProductService(IFileCsvService fileCsvService, IProductRepository productRepository)
+        public ProductService(IFileCsvService fileCsvService, IProductRepository productRepository, IRecommendsMarketRepository recommendsMarketRepository)
         {
             _fileCsvService = fileCsvService;
             _productRepository = productRepository;
+            _recommendsMarketRepository = recommendsMarketRepository;
         }
 
         public async Task<ResponseApiHelper> AddProductsAndSearchableNamesAysnc(string file)
@@ -30,6 +32,7 @@ namespace RM.Domain.Services
             var namesFirebase = await AddSearchableNamesAsync(productsFile);
             await _productRepository.AddAsync(products, market);
             await _productRepository.AddSearchableNamesAsync(namesFirebase.ToList());
+            await _recommendsMarketRepository.DeleteAsync();
             return new ResponseApiHelper { Message = "Produtos cadastrados", Success = true, Data = products };
         }
 

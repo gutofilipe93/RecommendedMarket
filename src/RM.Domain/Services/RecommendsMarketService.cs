@@ -20,7 +20,7 @@ namespace RM.Domain.Services
             _recommendsMarketRepository = recommendsMarketRepository;
         }
 
-        public async Task<RecommendsMarket> GetRecommendsMarketService(List<string> itemsPurchase)
+        public async Task<RecommendsMarket> GetRecommendsMarket(List<string> itemsPurchase)
         {
             var recommendsMarketFirebase = await _recommendsMarketRepository.GetRecommendsMarket();
             if (recommendsMarketFirebase.Items.Count == 0)

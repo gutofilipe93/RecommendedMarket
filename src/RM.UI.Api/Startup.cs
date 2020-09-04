@@ -50,11 +50,12 @@ namespace RM.UI.Api
             //Repositoreis
             services.AddScoped<IPurchaseRepository,PurchaseRepository>();
             services.AddScoped<IProductRepository,ProductRepository>();
-
+            services.AddScoped<IRecommendsMarketRepository,RecommendsMarketRepository>();
             //Services
             services.AddScoped<IPurchaseService,PurchaseService>();
             services.AddScoped<IFileCsvService,FileCsvService>();
             services.AddScoped<IProductService,ProductService>();
+            services.AddScoped<IRecommendsMarketService,RecommendsMarketService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

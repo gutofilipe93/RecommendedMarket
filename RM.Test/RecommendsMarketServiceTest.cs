@@ -118,7 +118,7 @@ namespace RM.Test
             _recommendsMarket.Items.Add(new RecommendsMarketItem { Market = "savegnago", Name = "Iorgute", Price = 1.34d, SearchableName = "iorgute" });
             _recommendsMarket.Items.Add(new RecommendsMarketItem { Market = "savegnago", Name = "Agua", Price = 1.64d, SearchableName = "agua" });
 
-            var result = await _recommendsMarketService.GetRecommendsMarketService(_request);
+            var result = await _recommendsMarketService.GetRecommendsMarket(_request);
             
             Assert.Equal(3, result.Items.Count);
             Assert.Equal("savegnago", result.Market);
@@ -132,7 +132,7 @@ namespace RM.Test
         public async Task MustReturnTheBestMarketToPurchaseOfFile()
         {
 
-            var result = await _recommendsMarketService.GetRecommendsMarketService(_request);
+            var result = await _recommendsMarketService.GetRecommendsMarket(_request);
 
             Assert.Equal(3, result.Items.Count);
             Assert.Equal("tonin", result.Market);

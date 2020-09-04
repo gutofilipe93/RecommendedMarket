@@ -24,14 +24,14 @@ namespace RM.Infrastructure.Repositories
             if (!document.Exists)
                 return new RecommendsMarket { Items = new List<RecommendsMarketItem>()};
 
-            var recommendsMarket = document.ConvertTo<Dictionary<string, RecommendsMarket>>();                                    
-            return recommendsMarket[""];
+            var recommendsMarket = document.ConvertTo<RecommendsMarket>();                                    
+            return recommendsMarket;
         }
 
         public async Task SaveAsync(RecommendsMarket recommendsMarket)
         {
             var db = new FirebaseConnection().Open();
-            DocumentReference docRef = db.Collection("recommendsMarket").Document();
+            DocumentReference docRef = db.Collection("recommendsMarket").Document("recommendation");
             await docRef.SetAsync(recommendsMarket);
         }
     }

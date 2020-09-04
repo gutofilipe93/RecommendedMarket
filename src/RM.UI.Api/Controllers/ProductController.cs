@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using RM.Domain.Interfaces.Services;
+using RM.UI.Api.Helpers;
 
 namespace RM.UI.Api.Controllers
 {
@@ -21,7 +22,7 @@ namespace RM.UI.Api.Controllers
         {
             try
             {
-                string filePath = await CreateFileTemp(file);
+                string filePath = await Utilities.CreateFileTemp(file);
                 await _productService.AddProductsAndSearchableNamesAysnc(filePath);
                 return Ok(new { path = filePath });
             }
@@ -31,14 +32,6 @@ namespace RM.UI.Api.Controllers
             }
         }
 
-        private async Task<string> CreateFileTemp(IFormFile file)
-        {
-            var filePath = Path.GetTempFileName();
-
-            if (file.Length > 0)
-                using (var stream = new FileStream(filePath, FileMode.Create))
-                    await file.CopyToAsync(stream);
-            return filePath;
-        }
+        
     }
 }
