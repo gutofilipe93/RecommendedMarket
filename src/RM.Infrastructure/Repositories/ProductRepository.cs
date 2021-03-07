@@ -33,6 +33,13 @@ namespace RM.Infrastructure.Repositories
             await docRef.SetAsync(initialData);
         }
 
+        public async Task DeleteAsync(string name)
+        {
+            var db = _firebaseConnection.Open();
+            DocumentReference docRef = db.Collection("products").Document("NomePesquisaveis");            
+            await docRef.DeleteAsync();
+        }
+
         public async Task<ICollection<Product>> GetAsync(string market)
         {
             var db = _firebaseConnection.Open();

@@ -11,5 +11,6 @@ namespace RM.Domain.Interfaces.Repositories
         Task<ICollection<string>> GetSearchableNamesAsync();
         Task AddSearchableNamesAsync(List<string> names);
         Task<ICollection<string>> GetMarkets();
+        Task DeleteAsync(string name);
     }
 }

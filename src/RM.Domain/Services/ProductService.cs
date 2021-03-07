@@ -90,6 +90,7 @@ namespace RM.Domain.Services
             productFirebase.Price = productFile.Preco;
             productFirebase.DateOfLastPurchase = productFile.DataCompra;
             productFirebase.TemOferta = productFile.TemOferta == 1 ? true : false;
+            productFirebase.Name = productFile.Nome;
         }
 
         private async Task<List<string>> AddSearchableNamesAsync(List<ProductDto> productsFile)

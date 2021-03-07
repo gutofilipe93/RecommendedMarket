@@ -7,7 +7,7 @@ namespace RM.Infrastructure.Data
 {
     public class FirebaseConnection : IFirebaseConnection
     {
-        private string _connection { get; set; } = "mercado-recomendado-fb-firebase-adminsdk-xin29-37cdcba084.json";               
+        private string _connection { get; set; } = "mercado-recomendado-fb-508136784fbf.json";               
         public FirestoreDb Open()
         {                       
             Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", _connection);            
