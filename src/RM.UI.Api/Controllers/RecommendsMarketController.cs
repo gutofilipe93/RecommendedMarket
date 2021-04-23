@@ -28,5 +28,20 @@ namespace RM.UI.Api.Controllers
                 return BadRequest(new {message = ex.Message});    
             }
         }
+
+        [Authorize]
+        [Route("api/products/market/{market}"), HttpPost]
+        public async Task<IActionResult> GetProductsByMarket([FromBody] List<string> items, string market)
+        {
+            try
+            {  
+                var result = await _recommendsMarketService.GetProductsByMarket(items,market);
+                return Ok(result);
+            }
+            catch (System.Exception ex)
+            {
+                return BadRequest(new {message = ex.Message});    
+            }
+        }
     }
 }

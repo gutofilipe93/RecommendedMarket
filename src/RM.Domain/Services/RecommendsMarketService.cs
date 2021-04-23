@@ -43,6 +43,7 @@ namespace RM.Domain.Services
             }
             recommendsMarket.Market = markets.OrderByDescending(x => x.Value).FirstOrDefault().Key;
             recommendsMarket.Message = GetAmountMarketByProducts(markets);
+            recommendsMarket.TotalPrice =  recommendsMarket.Items.Sum(x => x.Price);
             return recommendsMarket;
         }
 
@@ -106,6 +107,27 @@ namespace RM.Domain.Services
             }
 
             return sbMessage.ToString();
+        }
+
+        public async Task<RecommendsMarket> GetProductsByMarket(List<string> itemsPurchase, string market)
+        {
+            if(string.IsNullOrEmpty(market))
+               return new RecommendsMarket { Message = "Mercado não informado", Items = new List<RecommendsMarketItem>() };
+
+            var productsFirebase = await _productRepository.GetAsync(market);
+            var recommendsMarket = new RecommendsMarket { Items = new List<RecommendsMarketItem>() };
+            foreach (var item in itemsPurchase)
+            {
+                var product = productsFirebase.FirstOrDefault(x => x.SearchableName == item);
+                if (product == null)
+                    continue;
+
+                recommendsMarket.Items.Add(FormatProductToRecommendMarkeItem(product));                
+            }
+            
+            recommendsMarket.Market = market;
+            recommendsMarket.TotalPrice =  recommendsMarket.Items.Sum(x => x.Price);
+            return recommendsMarket;
         }
     }
 }
