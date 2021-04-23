@@ -16,6 +16,9 @@ namespace RM.Domain.Entities
         [FirestoreProperty]
         public ICollection<RecommendsMarketItem> Items { get; set; }
 
+        [FirestoreProperty]
+        public double TotalPrice {get; set;}
+
     }
 
     [FirestoreData]

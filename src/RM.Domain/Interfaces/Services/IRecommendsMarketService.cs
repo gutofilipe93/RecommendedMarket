@@ -8,5 +8,6 @@ namespace RM.Domain.Interfaces.Services
     public interface IRecommendsMarketService
     {
          Task<RecommendsMarket> GetRecommendsMarket(List<string> itemsPurchase);
+         Task<RecommendsMarket> GetProductsByMarket(List<string> itemsPurchase,string market);
     }
 }
