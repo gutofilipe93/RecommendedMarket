@@ -124,7 +124,8 @@ namespace RM.Test
             Assert.Equal("savegnago", result.Market);
             Assert.Equal(9.05d, result.Items.FirstOrDefault(x => x.SearchableName == "linguica").Price);
             Assert.Equal(1.34d, result.Items.FirstOrDefault(x => x.SearchableName == "iorgute").Price);
-            Assert.Equal(1.64d, result.Items.FirstOrDefault(x => x.SearchableName == "agua").Price);            
+            Assert.Equal(1.64d, result.Items.FirstOrDefault(x => x.SearchableName == "agua").Price);  
+            Assert.Equal(12.03d, Math.Round(result.TotalPrice,2, MidpointRounding.AwayFromZero));          
         }
 
         [Fact(DisplayName = "Deve retornar o melhor mecardo para ir e os preço dos produtos com o arquivo já criado")]
@@ -139,6 +140,7 @@ namespace RM.Test
             Assert.Equal(10.05d, result.Items.FirstOrDefault(x => x.SearchableName == "linguica").Price);
             Assert.Equal(1.54d, result.Items.FirstOrDefault(x => x.SearchableName == "iorgute").Price);
             Assert.Equal(1.95d, result.Items.FirstOrDefault(x => x.SearchableName == "agua").Price);
+            Assert.Equal(13.54d, Math.Round(result.TotalPrice,2, MidpointRounding.AwayFromZero));          
         }
     }
 }

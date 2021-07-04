@@ -66,7 +66,8 @@ namespace RM.Domain.Services
             foreach (var name in namesSearchable)
             {
                 var product = productsFirebase.OrderBy(x => x.Price).FirstOrDefault(x => x.SearchableName == name);
-                itemsRecommends.Add(FormatProductToRecommendMarkeItem(product));
+                if(product != null)
+                    itemsRecommends.Add(FormatProductToRecommendMarkeItem(product));
             }
             return itemsRecommends;
         }
