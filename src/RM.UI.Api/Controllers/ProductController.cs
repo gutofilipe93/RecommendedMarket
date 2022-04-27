@@ -23,7 +23,7 @@ namespace RM.UI.Api.Controllers
             try
             {
                 string filePath = await Utilities.CreateFileTemp(file);
-                await _productService.AddProductsAndSearchableNamesAysnc(filePath);
+                await _productService.AddProductsAndSearchableNamesAsync(filePath);
                 return Ok(new { path = filePath });
             }
             catch (System.Exception ex)
@@ -32,6 +32,20 @@ namespace RM.UI.Api.Controllers
             }
         }
 
-        
+        [Authorize]
+        [Route("api/products/searchablenames"), HttpPost]
+        public async Task<IActionResult> GetSearchableNamesAsync()
+        {
+            try
+            {                
+                var names = await _productService.GetSearchableNamesAsync();
+                return Ok(names);
+            }
+            catch (System.Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
     }
 }

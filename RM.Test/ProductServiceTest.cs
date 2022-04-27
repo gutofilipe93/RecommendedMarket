@@ -84,7 +84,7 @@ namespace RM.Test
                 DatePenultimatePurchase = "26/08/2020"
             });
 
-            var result = await _productService.AddProductsAndSearchableNamesAysnc("tonin");
+            var result = await _productService.AddProductsAndSearchableNamesAsync("tonin");
             var productsFirebase = (List<Product>)result.Data;
             
             Assert.Equal(2,productsFirebase.Count);
@@ -110,7 +110,7 @@ namespace RM.Test
                 DatePenultimatePurchase = "26/08/2020"
             });
 
-            var result = await _productService.AddProductsAndSearchableNamesAysnc("tonin");
+            var result = await _productService.AddProductsAndSearchableNamesAsync("tonin");
             var productsFirebase = (List<Product>)result.Data;
 
             Assert.Equal("30/08/2020",productsFirebase.FirstOrDefault(x => x.SearchableName == "linguica").DateOfLastPurchase);
@@ -135,7 +135,7 @@ namespace RM.Test
                 DatePenultimatePurchase = "26/08/2020"
             });
 
-            var result = await _productService.AddProductsAndSearchableNamesAysnc("tonin");
+            var result = await _productService.AddProductsAndSearchableNamesAsync("tonin");
             var productsFirebase = (List<Product>)result.Data;
 
             Assert.Equal(3,productsFirebase.Count);

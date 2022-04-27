@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using RM.Domain.Services.Helpers;
 
@@ -5,6 +6,7 @@ namespace RM.Domain.Interfaces.Services
 {
     public interface IProductService
     {
-         Task<ResponseApiHelper> AddProductsAndSearchableNamesAysnc(string file);         
+        Task<ResponseApiHelper> AddProductsAndSearchableNamesAsync(string file);
+        Task<ICollection<string>> GetSearchableNamesAsync();
     }
 }

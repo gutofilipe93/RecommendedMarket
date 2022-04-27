@@ -22,7 +22,7 @@ namespace RM.Domain.Services
             _recommendsMarketRepository = recommendsMarketRepository;
         }
 
-        public async Task<ResponseApiHelper> AddProductsAndSearchableNamesAysnc(string file)
+        public async Task<ResponseApiHelper> AddProductsAndSearchableNamesAsync(string file)
         {
             var productsFile = _fileCsvService.ReadFile(file);
             string market = productsFile.FirstOrDefault(x => x.Mercado != null)?.Mercado;
@@ -102,6 +102,11 @@ namespace RM.Domain.Services
                     namesFirebase.Add(productFile.NomePesquisa);
             }
             return namesFirebase.OrderBy(x=> x).ToList();
+        }
+
+        public async Task<ICollection<string>> GetSearchableNamesAsync()
+        {
+            return await _productRepository.GetSearchableNamesAsync();
         }
     }
 }
