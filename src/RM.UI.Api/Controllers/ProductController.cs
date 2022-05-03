@@ -33,7 +33,7 @@ namespace RM.UI.Api.Controllers
         }
 
         [Authorize]
-        [Route("api/products/searchablenames"), HttpPost]
+        [Route("api/products/searchablenames"), HttpGet]
         public async Task<IActionResult> GetSearchableNamesAsync()
         {
             try
