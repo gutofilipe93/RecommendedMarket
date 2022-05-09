@@ -41,7 +41,7 @@ namespace RM.Domain.Services
             List<Product> products = new List<Product>();
             foreach (var product in productsFirebase)
             {
-                if (!productsFile.Any(x => x.NomePesquisa == product.SearchableName))
+                if (!productsFile.Any(x => x.NomePesquisa?.ToLower() == product.SearchableName?.ToLower()))
                     products.Add(product);
             }
             return products;
@@ -60,7 +60,7 @@ namespace RM.Domain.Services
 
         private Product AssembleProductsToList(ICollection<Product> productsFirebase, ProductDto productsFile)
         {
-            var productFirebase = productsFirebase.FirstOrDefault(x => x.SearchableName == productsFile.NomePesquisa);
+            var productFirebase = productsFirebase.FirstOrDefault(x => x.SearchableName?.ToLower() == productsFile.NomePesquisa?.ToLower());
             if (productFirebase == null)
                 productFirebase = FormatProductNew(productsFile);
             else
@@ -106,7 +106,8 @@ namespace RM.Domain.Services
 
         public async Task<ICollection<string>> GetSearchableNamesAsync()
         {
-            return await _productRepository.GetSearchableNamesAsync();
+            var names = await _productRepository.GetSearchableNamesAsync();
+            return names.OrderBy(x => x).ToList();
         }
     }
 }

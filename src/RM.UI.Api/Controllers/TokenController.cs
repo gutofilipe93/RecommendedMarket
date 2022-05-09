@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing;
 using RM.Domain.Interfaces.Services;
 using RM.Domain.Services.Dtos;
 using System;
@@ -26,6 +27,21 @@ namespace RM.UI.Api.Controllers
             try
             {
                 var token = await _tokenService.GetTokenAsync(tokenDto.Email, tokenDto.Password);
+                return Ok(token);
+            }
+            catch (System.Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
+        [HttpPost]
+        [Route("reflesh")]
+        public async Task<IActionResult> RefleshTokenAsync(TokebDto tokenDto)
+        {
+            try
+            {                
+                var token = await _tokenService.RefleshTokenAsync(tokenDto.RefleshToken);
                 return Ok(token);
             }
             catch (System.Exception ex)

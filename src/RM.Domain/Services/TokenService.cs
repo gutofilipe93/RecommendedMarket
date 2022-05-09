@@ -29,5 +29,23 @@ namespace RM.Domain.Services
             var result = JsonConvert.DeserializeObject<TokenResponse>(response.Content);
             return result;
         }
+
+        public async Task<dynamic> RefleshTokenAsync(string refleshToken)
+        {
+            var client = new RestClient("https://securetoken.googleapis.com/v1/token?key=AIzaSyDQ2SuHaluD0m2m-HzILWqEBTE_LPCf6Tc");
+            var request = new RestRequest();
+            request.Method = Method.POST;
+            var obj = new
+            {
+                refresh_token = refleshToken,
+                grant_type = "refresh_token"
+            };
+
+            var json = JsonConvert.SerializeObject(obj);
+            request.AddJsonBody(obj);
+            var response = await client.ExecuteAsync(request);
+            var result = JsonConvert.DeserializeObject<RefleshTokenResponseDto>(response.Content);
+            return result;
+        }
     }
 }

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using RM.Domain.Interfaces.Services;
+using RM.Domain.Services.Dtos;
 using RM.UI.Api.Helpers;
 
 namespace RM.UI.Api.Controllers
@@ -19,7 +20,7 @@ namespace RM.UI.Api.Controllers
         }
 
         [Authorize]
-        [Route("api/purchase"), HttpPost]
+        [Route("api/purchase/file"), HttpPost]
         public async Task<IActionResult> AddProductAsync(IFormFile file)
         {
             try
@@ -31,6 +32,21 @@ namespace RM.UI.Api.Controllers
             catch (System.Exception ex)
             {
                 return BadRequest(new {message = ex.Message});    
+            }
+        }
+
+        [Authorize]
+        [Route("api/purchase/list"), HttpPost]
+        public async Task<IActionResult> AddProductAsync(List<ProductDto> productsDto)
+        {
+            try
+            {                
+                var result = await _purchaseService.AddPurchaseAsync(productsDto);
+                return Ok(result);
+            }
+            catch (System.Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
             }
         }
     }

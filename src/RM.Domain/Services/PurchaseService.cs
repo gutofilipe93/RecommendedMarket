@@ -20,6 +20,13 @@ namespace RM.Domain.Services
             _purchaseRepository = purchaseRepository;
         }
 
+        public async Task<ResponseApiHelper> AddPurchaseAsync(List<ProductDto> productsDto)
+        {
+            Purchase purchase = FormatPurchase(productsDto);
+            await _purchaseRepository.AddAsync(purchase);
+            return new ResponseApiHelper { Message = "Compra cadastrada", Success = true, Data = purchase };
+        }
+
         public async Task<ResponseApiHelper> AddPurchaseAsync(string file)
         {
             var productsDto = _fileCsvService.ReadFile(file);
@@ -32,7 +39,7 @@ namespace RM.Domain.Services
         {
             Purchase purchase = new Purchase
             {
-                Market = productsDto.FirstOrDefault(x => x.Mercado != null)?.Mercado,
+                Market = productsDto.FirstOrDefault(x => x.Mercado != null)?.Mercado?.ToLower(),
                 PurchaseDate = productsDto.FirstOrDefault(x => x.DataCompra != null)?.DataCompra,
                 Processed = false,
                 Items = new List<Item>()
@@ -54,6 +61,6 @@ namespace RM.Domain.Services
                 Price = product.Preco,
                 HaveOffer = product.TemOferta == 1 ? true : false
             };
-        }
+        }        
     }
 }

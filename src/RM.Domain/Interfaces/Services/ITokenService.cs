@@ -8,5 +8,6 @@ namespace RM.Domain.Interfaces.Services
     public interface ITokenService
     {
         Task<dynamic> GetTokenAsync(string user, string password);
+        Task<dynamic> RefleshTokenAsync(string refleshToken);
     }
 }
