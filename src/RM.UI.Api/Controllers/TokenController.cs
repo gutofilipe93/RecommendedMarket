@@ -41,7 +41,7 @@ namespace RM.UI.Api.Controllers
         {
             try
             {                
-                var token = await _tokenService.RefleshTokenAsync(tokenDto.RefleshToken);
+                var token = await _tokenService.RefleshTokenAsync(tokenDto.RefreshToken);
                 return Ok(token);
             }
             catch (System.Exception ex)

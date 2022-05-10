@@ -30,14 +30,14 @@ namespace RM.Domain.Services
             return result;
         }
 
-        public async Task<dynamic> RefleshTokenAsync(string refleshToken)
+        public async Task<dynamic> RefleshTokenAsync(string refreshToken)
         {
             var client = new RestClient("https://securetoken.googleapis.com/v1/token?key=AIzaSyDQ2SuHaluD0m2m-HzILWqEBTE_LPCf6Tc");
             var request = new RestRequest();
             request.Method = Method.POST;
             var obj = new
             {
-                refresh_token = refleshToken,
+                refresh_token = refreshToken,
                 grant_type = "refresh_token"
             };
 

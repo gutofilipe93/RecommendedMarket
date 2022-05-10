@@ -8,6 +8,6 @@ namespace RM.Domain.Services.Dtos
     {
         public string Email { get; set; }
         public string Password { get; set; }
-        public string RefleshToken { get; set; }
+        public string RefreshToken { get; set; }
     }
 }
