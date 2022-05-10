@@ -109,5 +109,18 @@ namespace RM.Domain.Services
             var names = await _productRepository.GetSearchableNamesAsync();
             return names.OrderBy(x => x).ToList();
         }
+
+        public async Task<ResponseApiHelper> AddProductsAndSearchableNamesListAsync(List<ProductDto> productsFile)
+        {
+            string market = productsFile.FirstOrDefault(x => x.Mercado != null)?.Mercado;
+            var productsFirebase = await _productRepository.GetAsync(market);
+            List<Product> products = AddProductsFirebase(productsFile, productsFirebase);
+            products = products.Union(AddProductsFile(productsFile, productsFirebase)).ToList();
+            var namesFirebase = await AddSearchableNamesAsync(productsFile);
+            await _productRepository.AddAsync(products, market);
+            await _productRepository.AddSearchableNamesAsync(namesFirebase.ToList());
+            await _recommendsMarketRepository.DeleteAsync();
+            return new ResponseApiHelper { Message = "Produtos cadastrados", Success = true, Data = products };
+        }
     }
 }

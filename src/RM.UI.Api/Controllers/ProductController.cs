@@ -1,9 +1,11 @@
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using RM.Domain.Interfaces.Services;
+using RM.Domain.Services.Dtos;
 using RM.UI.Api.Helpers;
 
 namespace RM.UI.Api.Controllers
@@ -17,7 +19,7 @@ namespace RM.UI.Api.Controllers
         }
 
         [Authorize]
-        [Route("api/product"), HttpPost]
+        [Route("api/product/file"), HttpPost]
         public async Task<IActionResult> AddProductAsync(IFormFile file)
         {
             try
@@ -29,6 +31,21 @@ namespace RM.UI.Api.Controllers
             catch (System.Exception ex)
             {
                 return BadRequest(new {message = ex.Message});    
+            }
+        }
+
+        [Authorize]
+        [Route("api/product/list"), HttpPost]
+        public async Task<IActionResult> AddProductListAsync(List<ProductDto> productsFile)
+        {
+            try
+            {                
+                var result = await _productService.AddProductsAndSearchableNamesListAsync(productsFile);
+                return Ok(result);
+            }
+            catch (System.Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
             }
         }
 
