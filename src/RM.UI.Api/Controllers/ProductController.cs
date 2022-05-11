@@ -10,7 +10,8 @@ using RM.UI.Api.Helpers;
 
 namespace RM.UI.Api.Controllers
 {
-    public class ProductController : Controller
+    [ApiController]
+    public class ProductController : ControllerBase
     {
         private readonly IProductService _productService;
         public ProductController(IProductService productService)
@@ -36,11 +37,11 @@ namespace RM.UI.Api.Controllers
 
         [Authorize]
         [Route("api/product/list"), HttpPost]
-        public async Task<IActionResult> AddProductListAsync(List<ProductDto> productsFile)
+        public async Task<IActionResult> AddProductListAsync(List<ProductDto> productsDto)
         {
             try
             {                
-                var result = await _productService.AddProductsAndSearchableNamesListAsync(productsFile);
+                var result = await _productService.AddProductsAndSearchableNamesListAsync(productsDto);
                 return Ok(result);
             }
             catch (System.Exception ex)
