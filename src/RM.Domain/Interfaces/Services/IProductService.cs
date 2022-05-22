@@ -10,5 +10,6 @@ namespace RM.Domain.Interfaces.Services
         Task<ResponseApiHelper> AddProductsAndSearchableNamesAsync(string file);
         Task<ResponseApiHelper> AddProductsAndSearchableNamesListAsync(List<ProductDto> productsFile);
         Task<ICollection<string>> GetSearchableNamesAsync();
+        Task<ResponseApiHelper> AdjustDuplicateNames(List<DuplicateName> duplicateNames); 
     }
 }

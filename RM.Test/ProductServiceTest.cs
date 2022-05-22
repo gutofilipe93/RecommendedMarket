@@ -92,8 +92,7 @@ namespace RM.Test
             Assert.Equal("30/08/2020",productsFirebase.FirstOrDefault(x => x.SearchableName == "linguica").DateOfLastPurchase);
         }
 
-     
-        
+             
         [Fact(DisplayName = "Deve atualizar o preço e a data de acordo com o arquivo csv")]
         [Trait("Recomendacao de Mercado", "Update preco e data")]
         public async Task MustUpdateDateOfLastPurchaseAndPrice()
@@ -142,6 +141,88 @@ namespace RM.Test
             Assert.Equal(1,productsFirebase.Count(x => x.SearchableName == "linguica"));
             Assert.Equal(1,productsFirebase.Count(x => x.SearchableName == "agua"));
             Assert.Equal(1,productsFirebase.Count(x => x.SearchableName == "toddy"));
-        }  
+        }
+
+        [Fact(DisplayName = "Deve corrigir os nome errados do firebase")]
+        [Trait("Recomendacao de Mercado","Ajuste de nomes duplicados ou errados")]
+        public async Task MustUpdateNamesErrorsInFirebase()
+        {
+            ICollection<string> markets = new List<string> { "tonin" };
+            _productRepositoryMock.Setup(x => x.GetMarkets()).ReturnsAsync(markets);
+
+            _products.Add(new Product
+            {
+                Name = "Coca-Cola",
+                Market = "tonin",
+                Price = 2.05d,
+                PenultimatePrice = 2.05d,
+                SearchableName = "coca",
+                TemOferta = false,
+                DateOfLastPurchase = "26/08/2020",
+                DatePenultimatePurchase = "26/08/2020"
+            });
+            _searchableNames.Add("coca");
+
+            var namesDuplicate = new List<DuplicateName>()
+            {
+                new DuplicateName
+                {
+                    Error = "coca",
+                    Correct= "coca-cola"
+                }
+            };
+
+            var result = await _productService.AdjustDuplicateNames(namesDuplicate);
+
+            Assert.Equal("coca-cola", _products.FirstOrDefault(x => x.SearchableName == "coca-cola").SearchableName);
+            Assert.Equal("coca-cola", _searchableNames.FirstOrDefault(x => x == "coca-cola"));
+        }
+
+        [Fact(DisplayName = "Deve corrigir os nome errados do firebase em mais de um mercado")]
+        [Trait("Recomendacao de Mercado", "Ajuste de nomes duplicados ou errados")]
+        public async Task MustUpdateNamesErrorsInFirebaseInAmountOfOneMarket()
+        {
+            ICollection<string> markets = new List<string> { "tonin", "big" };
+            _productRepositoryMock.Setup(x => x.GetMarkets()).ReturnsAsync(markets);
+
+            _products.Add(new Product
+            {
+                Name = "Coca-Cola",
+                Market = "tonin",
+                Price = 2.05d,
+                PenultimatePrice = 2.05d,
+                SearchableName = "coca",
+                TemOferta = false,
+                DateOfLastPurchase = "26/08/2020",
+                DatePenultimatePurchase = "26/08/2020"
+            });
+            _products.Add(new Product
+            {
+                Name = "Coca-Cola",
+                Market = "big",
+                Price = 2.05d,
+                PenultimatePrice = 2.05d,
+                SearchableName = "coca",
+                TemOferta = false,
+                DateOfLastPurchase = "26/08/2020",
+                DatePenultimatePurchase = "26/08/2020"
+            });
+            _searchableNames.Add("coca");
+            _searchableNames.Add("coca-cola");
+
+            var namesDuplicate = new List<DuplicateName>()
+            {
+                new DuplicateName
+                {
+                    Error = "coca",
+                    Correct= "coca-cola"
+                }
+            };
+
+            var result = await _productService.AdjustDuplicateNames(namesDuplicate);
+
+            Assert.Equal("coca-cola", _products.FirstOrDefault(x => x.Market == "big" && x.SearchableName == "coca-cola").SearchableName);
+            Assert.Equal(3, _searchableNames.Count());
+        }
     }
 }

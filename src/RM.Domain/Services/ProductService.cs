@@ -122,5 +122,46 @@ namespace RM.Domain.Services
             await _recommendsMarketRepository.DeleteAsync();
             return new ResponseApiHelper { Message = "Produtos cadastrados", Success = true, Data = products };
         }
+
+        public async Task<ResponseApiHelper> AdjustDuplicateNames(List<DuplicateName> duplicateNames)
+        {
+            var markets = await _productRepository.GetMarkets();
+            foreach (var market in markets)
+            {
+                var hasUpdateOfName = false;
+                var productsFirebase = await _productRepository.GetAsync(market);
+                foreach (var name in duplicateNames)
+                {
+                    var product = productsFirebase.FirstOrDefault(x => x.SearchableName == name.Error);
+                    if (product != null)
+                    {
+                        productsFirebase.Remove(product);
+                        product.SearchableName = name.Correct;
+                        productsFirebase.Add(product);
+                        hasUpdateOfName = true;
+                    }
+                }
+
+                if (hasUpdateOfName)                
+                    await _productRepository.AddAsync(productsFirebase.ToList(), market);                
+            }
+
+            var namesFirebase = await _productRepository.GetSearchableNamesAsync();
+            foreach (var name in duplicateNames)
+            {
+                var nameFirebase = namesFirebase.FirstOrDefault(x => x == name.Error);
+                if (nameFirebase != null)
+                {
+                    namesFirebase.Remove(nameFirebase);
+                    var nameCorrect = namesFirebase.FirstOrDefault(x => x == name.Correct);
+                    if (nameCorrect == null)
+                        namesFirebase.Add(name.Correct);
+                }
+            }
+
+            await _productRepository.AddSearchableNamesAsync(namesFirebase.ToList());
+            await _recommendsMarketRepository.DeleteAsync();
+            return new ResponseApiHelper { Message = "Nome dos produtos foram ajustados", Success = true };
+        }
     }
 }

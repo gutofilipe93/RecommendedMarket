@@ -65,5 +65,24 @@ namespace RM.UI.Api.Controllers
             }
         }
 
+        [Authorize]
+        [Route("api/products/duplicatenames"), HttpPost]
+        public async Task<IActionResult> AdjustDuplicateNames(List<DuplicateName> duplicateNames)
+        {
+            try
+            {
+                var result = await _productService.AdjustDuplicateNames(duplicateNames);
+                return Ok(new
+                {
+                    result.Message,
+                    result.Success
+                });
+            }
+            catch (System.Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
     }
 }
