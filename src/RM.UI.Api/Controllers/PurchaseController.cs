@@ -11,7 +11,8 @@ using RM.UI.Api.Helpers;
 
 namespace RM.UI.Api.Controllers
 {
-    public class PurchaseController : Controller
+    [ApiController]
+    public class PurchaseController : ControllerBase
     {
         private readonly IPurchaseService _purchaseService;
         public PurchaseController(IPurchaseService purchaseService)

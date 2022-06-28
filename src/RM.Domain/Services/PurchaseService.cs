@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -22,35 +23,33 @@ namespace RM.Domain.Services
 
         public async Task<ResponseApiHelper> AddPurchaseAsync(List<ProductDto> productsDto)
         {
-            Purchase purchase = FormatPurchase(productsDto);
-            await _purchaseRepository.AddAsync(purchase);
-            return new ResponseApiHelper { Message = "Compra cadastrada", Success = true, Data = purchase };
+            var purchases = FormatPurchase(productsDto);
+            var month = DateTime.Today.Month.ToString().Length == 1 ? $"0{DateTime.Today.Month}" : DateTime.Today.Month.ToString();
+            var key = $"{month}-{DateTime.Today.Year}";
+            var purchasesFirebase = await _purchaseRepository.GetPurchases(key);
+            purchasesFirebase = purchasesFirebase.Union(purchases).ToList();
+            await _purchaseRepository.AddAsync(purchasesFirebase);
+            return new ResponseApiHelper { Message = "Compra cadastrada", Success = true, Data = purchases };
         }
 
         public async Task<ResponseApiHelper> AddPurchaseAsync(string file)
         {
             var productsDto = _fileCsvService.ReadFile(file);
-            Purchase purchase = FormatPurchase(productsDto);
-            await _purchaseRepository.AddAsync(purchase);
-            return new ResponseApiHelper {Message =  "Compra cadastrada", Success = true, Data = purchase};
+            var purchases = FormatPurchase(productsDto);
+            await _purchaseRepository.AddAsync(purchases);
+            return new ResponseApiHelper {Message =  "Compra cadastrada", Success = true, Data = purchases};
         }
         
-        private  Purchase FormatPurchase(List<ProductDto> productsDto)
+        private  List<Item> FormatPurchase(List<ProductDto> productsDto)
         {
-            Purchase purchase = new Purchase
-            {
-                Market = productsDto.FirstOrDefault(x => x.Mercado != null)?.Mercado?.ToLower(),
-                PurchaseDate = productsDto.FirstOrDefault(x => x.DataCompra != null)?.DataCompra,
-                Processed = false,
-                Items = new List<Item>()
-            };
+            var items = new List<Item>();
             foreach (var product in productsDto)
             {
                 Item item = FormatItem(product);
-                purchase.Items.Add(item);
+                items.Add(item);
             }
 
-            return purchase;
+            return items;
         }
         private  Item FormatItem(ProductDto product)
         {

@@ -5,9 +5,7 @@ namespace RM.Domain.Entities
 {
     [FirestoreData]
     public class Purchase
-    {
-        [FirestoreProperty]
-        public string PurchaseDate { get; set; }
+    {        
         
         [FirestoreProperty]
         public string Market { get; set; }

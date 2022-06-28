@@ -14,12 +14,14 @@ namespace RM.Domain.Services
         private readonly IFileCsvService _fileCsvService;
         private readonly IProductRepository _productRepository;
         private readonly IRecommendsMarketRepository _recommendsMarketRepository;
+        private readonly IPurchaseService _purchaseService;
 
-        public ProductService(IFileCsvService fileCsvService, IProductRepository productRepository, IRecommendsMarketRepository recommendsMarketRepository)
+        public ProductService(IFileCsvService fileCsvService, IProductRepository productRepository, IRecommendsMarketRepository recommendsMarketRepository, IPurchaseService purchaseService)
         {
             _fileCsvService = fileCsvService;
             _productRepository = productRepository;
             _recommendsMarketRepository = recommendsMarketRepository;
+            _purchaseService = purchaseService;
         }
 
         public async Task<ResponseApiHelper> AddProductsAndSearchableNamesAsync(string file)
@@ -32,7 +34,7 @@ namespace RM.Domain.Services
             var namesFirebase = await AddSearchableNamesAsync(productsFile);
             await _productRepository.AddAsync(products, market);
             await _productRepository.AddSearchableNamesAsync(namesFirebase.ToList());
-            await _recommendsMarketRepository.DeleteAsync();
+            await _recommendsMarketRepository.DeleteAsync();            
             return new ResponseApiHelper { Message = "Produtos cadastrados", Success = true, Data = products };
         }
 
@@ -120,6 +122,7 @@ namespace RM.Domain.Services
             await _productRepository.AddAsync(products, market);
             await _productRepository.AddSearchableNamesAsync(namesFirebase.ToList());
             await _recommendsMarketRepository.DeleteAsync();
+            await _purchaseService.AddPurchaseAsync(productsFile);
             return new ResponseApiHelper { Message = "Produtos cadastrados", Success = true, Data = products };
         }
 
