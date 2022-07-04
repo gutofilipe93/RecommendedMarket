@@ -57,7 +57,7 @@ namespace RM.Domain.Services
             {
                 Name = product.Nome,
                 SearchableName = product.NomePesquisa,
-                Price = product.Preco,
+                Price = product.PrecoTotal,
                 HaveOffer = product.TemOferta == 1 ? true : false
             };
         }        

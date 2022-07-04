@@ -9,5 +9,6 @@ namespace RM.Domain.Services.Dtos
         public string Mercado { get; set; }
         public string DataCompra { get; set; }
         public string Cpf { get; set; }
+        public double PrecoTotal { get; set; }
     }
 }
