@@ -50,5 +50,24 @@ namespace RM.UI.Api.Controllers
                 return BadRequest(new { message = ex.Message });
             }
         }
+
+        [Authorize]
+        [Route("api/purchase/all"), HttpGet]
+        public async Task<IActionResult> GetAllAsync()
+        {
+            try
+            {
+                var result = await _purchaseService.GetAllAsync();
+                return Ok(result.Select(x => new 
+                {
+                    x.Value,
+                    x.Key
+                }));
+            }
+            catch (System.Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
     }
 }

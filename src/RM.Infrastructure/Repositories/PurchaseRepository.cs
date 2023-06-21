@@ -26,13 +26,19 @@ namespace RM.Infrastructure.Repositories
             await docRef.SetAsync(initialData);            
         }
 
-        public async Task<List<Item>> GetPurchases(string document)
+        public CollectionReference GetAll()
+        {
+            var db = _firebaseConnection.Open();
+            return db.Collection("shopping");
+        }
+
+        public async Task<List<Item>> GetPurchasesAsync(string document)
         {
             var db = _firebaseConnection.Open();
             var data = await db.Collection("shopping").Document(document).GetSnapshotAsync();
             if (!data.Exists)
                 return new List<Item>();
-            
+                                    
             var Items = data.ConvertTo<Dictionary<string, List<Item>>>();            
             return Items["Purcheses"];
         }
