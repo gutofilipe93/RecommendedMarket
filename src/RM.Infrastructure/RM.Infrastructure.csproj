@@ -5,11 +5,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Google.Cloud.Firestore" Version="2.1.0" />
+    <PackageReference Include="Google.Cloud.Firestore" Version="3.3.0" />
   </ItemGroup>
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
   </PropertyGroup>
 
 </Project>

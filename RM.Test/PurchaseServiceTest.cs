@@ -25,7 +25,7 @@ namespace RM.Test
                 {
                     Cpf = "3712144284",
                     Mercado = "tonin",
-                    Nome = "Linguiça Sadia",
+                    Nome = "Linguiï¿½a Sadia",
                     NomePesquisa = "linguica",
                     Preco = 12.56d,
                     TemOferta = 0,
@@ -34,13 +34,14 @@ namespace RM.Test
             });
 
             _purchaseRepositoryMock = new Mock<IPurchaseRepository>();
-            _purchaseRepositoryMock.Setup(x => x.AddAsync(new Purchase())).Returns(Task.FromResult(new { }));
+            var items = new List<Item>();
+            _purchaseRepositoryMock.Setup(x => x.AddAsync(items)).Returns(Task.FromResult(new { }));
 
             _purchaseService = new PurchaseService(_fileCsvServiceMock.Object, _purchaseRepositoryMock.Object);
         }
 
         [Fact(DisplayName = "Deve adicionar os produtos do csv no firebase")]
-        [Trait("Recomendação de Mercado", "Adicionar itens no Firebase")]
+        [Trait("Recomendaï¿½ï¿½o de Mercado", "Adicionar itens no Firebase")]
         public async Task  ShouldAddProductInFirebase()
         {
             var result = await _purchaseService.AddPurchaseAsync(It.IsAny<string>());

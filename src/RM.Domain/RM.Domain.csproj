@@ -1,13 +1,15 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
+    <UserSecretsId>67a143e7-e89b-4bef-8ae2-5d5d1c4acc69</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Google.Cloud.Firestore" Version="2.1.0" />
+    <PackageReference Include="Google.Cloud.Firestore" Version="3.3.0" />
     <PackageReference Include="RestSharp" Version="106.15.0" />
     <PackageReference Include="TinyCsvParser" Version="2.5.2" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="5.0.0" />
   </ItemGroup>
 
 </Project>

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -63,13 +64,30 @@ namespace RM.Domain.Services
         {
             var namesSearchable = await _productRepository.GetSearchableNamesAsync();
             var itemsRecommends = new List<RecommendsMarketItem>();
+            var dateLimit = DateTime.Now.Subtract(TimeSpan.FromDays(365));
             foreach (var name in namesSearchable)
             {
-                var product = productsFirebase.OrderBy(x => x.Price).FirstOrDefault(x => x.SearchableName == name);
+                Product product = null;
+                var products = productsFirebase.Where(x => x.SearchableName == name).ToList();
+                if (products.Count() == 0)
+                    continue;
+                else if (products.Count() == 1)
+                    product = products.FirstOrDefault();
+                else
+                {
+                    product = products.OrderBy(x => x.Price).FirstOrDefault(x => ConvertStringToDateTime(x.DateOfLastPurchase) > dateLimit)
+                               ?? products.OrderBy(x => x.Price).FirstOrDefault();
+                }
                 if(product != null)
                     itemsRecommends.Add(FormatProductToRecommendMarkeItem(product));
             }
             return itemsRecommends;
+        }
+
+        private DateTime ConvertStringToDateTime(string datePurchase)
+        {
+            var date = datePurchase.Split('/');
+            return Convert.ToDateTime($"{date[2]}-{date[1]}-{date[0]}");
         }
 
         private RecommendsMarketItem FormatProductToRecommendMarkeItem(Product product)

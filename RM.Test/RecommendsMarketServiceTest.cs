@@ -31,11 +31,11 @@ namespace RM.Test
             {
                 Name = "Agua",
                 Market = "tonin",
-                Price = 2.05d,
+                Price = 2.01d,
                 PenultimatePrice = 2.05d,
                 SearchableName = "agua",
                 TemOferta = false,
-                DateOfLastPurchase = "26/08/2020",
+                DateOfLastPurchase = "26/08/2022",
                 DatePenultimatePurchase = "26/08/2020"
             },
             new Product
@@ -116,7 +116,7 @@ namespace RM.Test
         {
             _recommendsMarket.Items.Add(new RecommendsMarketItem { Market = "tonin", Name = "Linguica", Price = 9.05d, SearchableName = "linguica" });
             _recommendsMarket.Items.Add(new RecommendsMarketItem { Market = "savegnago", Name = "Iorgute", Price = 1.34d, SearchableName = "iorgute" });
-            _recommendsMarket.Items.Add(new RecommendsMarketItem { Market = "savegnago", Name = "Agua", Price = 1.64d, SearchableName = "agua" });
+            _recommendsMarket.Items.Add(new RecommendsMarketItem { Market = "savegnago", Name = "Agua", Price = 1.64d, SearchableName = "agua", DateLastPurchase = "2019-02-02"});
 
             var result = await _recommendsMarketService.GetRecommendsMarket(_request);
             
@@ -139,8 +139,8 @@ namespace RM.Test
             Assert.Equal("tonin", result.Market);
             Assert.Equal(10.05d, result.Items.FirstOrDefault(x => x.SearchableName == "linguica").Price);
             Assert.Equal(1.54d, result.Items.FirstOrDefault(x => x.SearchableName == "iorgute").Price);
-            Assert.Equal(1.95d, result.Items.FirstOrDefault(x => x.SearchableName == "agua").Price);
-            Assert.Equal(13.54d, Math.Round(result.TotalPrice,2, MidpointRounding.AwayFromZero));          
+            Assert.Equal(2.01d, result.Items.FirstOrDefault(x => x.SearchableName == "agua").Price);
+            Assert.Equal(13.6d, Math.Round(result.TotalPrice,2, MidpointRounding.AwayFromZero));          
         }
     }
 }

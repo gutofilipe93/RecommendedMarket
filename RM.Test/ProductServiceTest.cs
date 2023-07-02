@@ -20,6 +20,7 @@ namespace RM.Test
         private readonly IProductService _productService;
         private readonly List<Product> _products;
         private readonly List<string> _searchableNames;
+        private readonly Mock<IPurchaseService> _purchaseServiceMock;
 
         private readonly Mock<IRecommendsMarketRepository> _recommendsMarketRepositoryMock;
         public ProductServiceTest()
@@ -64,8 +65,9 @@ namespace RM.Test
 
             _recommendsMarketRepositoryMock =new Mock<IRecommendsMarketRepository>();
             _recommendsMarketRepositoryMock.Setup(x => x.DeleteAsync()).Returns(Task.CompletedTask);
+            _purchaseServiceMock = new Mock<IPurchaseService>();
 
-            _productService = new ProductService(_fileCsvServiceMock.Object, _productRepositoryMock.Object,_recommendsMarketRepositoryMock.Object);
+            _productService = new ProductService(_fileCsvServiceMock.Object, _productRepositoryMock.Object,_recommendsMarketRepositoryMock.Object,_purchaseServiceMock.Object);
         }
 
         [Fact(DisplayName = "Deve adicionar os produtos sem duplica-los")]

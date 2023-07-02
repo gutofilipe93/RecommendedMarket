@@ -1,4 +1,5 @@
 {
-    "dotnet-test-explorer.testProjectPath": "RM.Test/RM.Test.csproj"
+    "dotnet-test-explorer.testProjectPath": "RM.Test/RM.Test.csproj",
+    "dotnet.defaultSolution": "RM.sln"
 }
 

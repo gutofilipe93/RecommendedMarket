@@ -10,7 +10,7 @@
             "request": "launch",
             "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/src/RM.UI.Api/bin/Debug/netcoreapp3.1/RM.UI.Api.dll",
+            "program": "${workspaceFolder}/src/RM.UI.Api/bin/Debug/net6.0/RM.UI.Api.dll",
             "args": [],
             "cwd": "${workspaceFolder}/src/RM.UI.Api",
             "stopAtEntry": false,
