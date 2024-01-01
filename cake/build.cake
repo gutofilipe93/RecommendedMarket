@@ -1,10 +1,10 @@
 
 var target = Argument("target", "ExecuteBuild");
 var configuration = Argument("configuration", "Release");
-var project = ".";
+var project = "G:\\Cursos\\RecommendedMarket";
 //var project = "C:\\Users\\Gustavo Barbosa\\Documents\\Cursos\\RecommendedMarket";
-var projectTest = "./RM.Test/RM.Test";
-var outputFolder = "Public";
+var projectTest = "G:\\Cursos\\RecommendedMarket\\RM.Test";
+var outputFolder = "C:\\Users\\gutof\\OneDrive\\Área de Trabalho\\Teste_de_automacao_Cake\\Deploy\\RM";
 
 
 //////////////////////////////////////////////////////////////////////
@@ -18,14 +18,14 @@ Task("Clean")
 
 Task("Restore")
     .Does(() => {
-        DotNetCoreRestore(project);
+        DotNetRestore(project);
     });
 
 Task("Build")
     .IsDependentOn("Clean")
     .IsDependentOn("Restore")
     .Does(() => {
-        DotNetCoreBuild(project, new DotNetCoreBuildSettings
+        DotNetBuild(project, new DotNetBuildSettings
         {
             NoRestore = true,
             Configuration = configuration
@@ -35,7 +35,7 @@ Task("Build")
 Task("Test")
     .IsDependentOn("Build")
     .Does(() => {
-        DotNetCoreTest(project, new DotNetCoreTestSettings
+        DotNetTest(projectTest, new DotNetTestSettings
         {
             NoRestore = true,
             Configuration = configuration,
@@ -46,7 +46,7 @@ Task("Test")
 Task("Publish")
     .IsDependentOn("Test")
     .Does(() => {
-        DotNetCorePublish(project, new DotNetCorePublishSettings
+        DotNetPublish(project, new DotNetPublishSettings
         {
             NoRestore = true,
             Configuration = configuration,

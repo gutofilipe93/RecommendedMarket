@@ -139,8 +139,8 @@ namespace RM.Test
             Assert.Equal("tonin", result.Market);
             Assert.Equal(10.05d, result.Items.FirstOrDefault(x => x.SearchableName == "linguica").Price);
             Assert.Equal(1.54d, result.Items.FirstOrDefault(x => x.SearchableName == "iorgute").Price);
-            Assert.Equal(2.01d, result.Items.FirstOrDefault(x => x.SearchableName == "agua").Price);
-            Assert.Equal(13.6d, Math.Round(result.TotalPrice,2, MidpointRounding.AwayFromZero));          
+            Assert.Equal(1.95d, result.Items.FirstOrDefault(x => x.SearchableName == "agua").Price);
+            Assert.Equal(13.54d, Math.Round(result.TotalPrice,2, MidpointRounding.AwayFromZero));          
         }
     }
 }

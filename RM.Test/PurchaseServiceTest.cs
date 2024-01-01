@@ -25,7 +25,7 @@ namespace RM.Test
                 {
                     Cpf = "3712144284",
                     Mercado = "tonin",
-                    Nome = "Lingui�a Sadia",
+                    Nome = "Linguica Sadia",
                     NomePesquisa = "linguica",
                     Preco = 12.56d,
                     TemOferta = 0,
@@ -41,13 +41,13 @@ namespace RM.Test
         }
 
         [Fact(DisplayName = "Deve adicionar os produtos do csv no firebase")]
-        [Trait("Recomenda��o de Mercado", "Adicionar itens no Firebase")]
+        [Trait("Recomendacao de Mercado", "Adicionar itens no Firebase")]
         public async Task  ShouldAddProductInFirebase()
         {
             var result = await _purchaseService.AddPurchaseAsync(It.IsAny<string>());
-            var purchase = (Purchase)result.Data;            
-            Assert.Equal("tonin", purchase.Market);
-            Assert.False(purchase.Items.FirstOrDefault().HaveOffer);
+            var purchases = (List<Item>)result.Data;            
+            
+            Assert.False(purchases.FirstOrDefault().HaveOffer);
         }
     }
 }

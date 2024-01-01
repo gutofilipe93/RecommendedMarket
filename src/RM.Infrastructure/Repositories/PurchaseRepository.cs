@@ -26,6 +26,15 @@ namespace RM.Infrastructure.Repositories
             await docRef.SetAsync(initialData);            
         }
 
+        public async Task AddAsync(List<Item> Items, string key)
+        {
+            var db = _firebaseConnection.Open();            
+            DocumentReference docRef = db.Collection("shopping").Document(key);
+            Dictionary<string, object> initialData = new Dictionary<string, object>();
+            initialData.Add("Purcheses", Items);
+            await docRef.SetAsync(initialData);
+        }
+
         public CollectionReference GetAll()
         {
             var db = _firebaseConnection.Open();

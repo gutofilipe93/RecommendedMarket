@@ -24,12 +24,19 @@ namespace RM.Domain.Services
         public async Task<ResponseApiHelper> AddPurchaseAsync(List<ProductDto> productsDto)
         {
             var purchases = FormatPurchase(productsDto);
-            var month = DateTime.Today.Month.ToString().Length == 1 ? $"0{DateTime.Today.Month}" : DateTime.Today.Month.ToString();
-            var key = $"{month}-{DateTime.Today.Year}";
+            var purchaseDate = ConvertStringToDateTime(productsDto.FirstOrDefault().DataCompra);                        
+            var month = purchaseDate.Month.ToString().Length == 1 ? $"0{purchaseDate.Month}" : purchaseDate.Month.ToString();
+            var key = $"{month}-{purchaseDate.Year}";
             var purchasesFirebase = await _purchaseRepository.GetPurchasesAsync(key);
             purchasesFirebase = purchasesFirebase.Union(purchases).ToList();
-            await _purchaseRepository.AddAsync(purchasesFirebase);
+            await _purchaseRepository.AddAsync(purchasesFirebase,key);
             return new ResponseApiHelper { Message = "Compra cadastrada", Success = true, Data = purchases };
+        }
+
+        private DateTime ConvertStringToDateTime(string datePurchase)
+        {
+            var date = datePurchase.Split('/');
+            return Convert.ToDateTime($"{date[2]}-{date[1]}-{date[0]}");
         }
 
         public async Task<ResponseApiHelper> AddPurchaseAsync(string file)
